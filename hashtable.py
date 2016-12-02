@@ -2,11 +2,11 @@
 
 from linkedlist import LinkedList
 
-
 class HashTable(object):
 
     def __init__(self, init_size=8):
         """Initialize this hash table with the given initial size"""
+        self.size = 0
         self.buckets = [LinkedList() for i in range(init_size)]
 
     def __repr__(self):
@@ -25,7 +25,7 @@ class HashTable(object):
     def length(self):
         """Return the length of this hash table by traversing its buckets"""
         # TODO: Count number of key-value entries in each of the buckets
-        pass
+        return self.size
 
     def contains(self, key):
         """Return True if this hash table contains the given key, or False"""
@@ -52,6 +52,7 @@ class HashTable(object):
         # TODO: Insert or update the given key-value entry into a bucket
         hash_key = self._bucket_index(key) # Gets the key in the array
         key_value = (key, value) # Store tuple containing key and value in key_value
+        self.size += 1 # Increments the size everytime set() is called
 
         if self.buckets[hash_key] is None: # Bucket returns None, the result of the hask_key, if empty
             self.buckets[hash_key] = list([key_value]) # Creates a new list based on the hash_key
@@ -64,23 +65,26 @@ class HashTable(object):
             self.buckets[hash_key].append(key_value) # If the key doesn't exist, add the tuple
             return True
 
-
     def delete(self, key):
         """Delete the given key from this hash table, or raise KeyError"""
         # TODO: Find the given key and delete its entry if found
-        hash_key = self._bucket_index(key) # Storing the key inside the hash_key
-
-        if self.buckets[hash_key] is None: # If we can't find the key
-            return False
-        for i in range(0, len(self.buckets[hash_key])): # Iterate through the amount of time until index
-            if self.buckets[hash_key][i][0] is key: # If the key matches
-                self.buckets[hash_key].pop(i) # Remove the key
-                return True
+        if self.contains(key) is False: # If key is not found
+            return "Key not found"
+        key_index = self._bucket_index(key) # Getting index of key
+        self.buckets.pop(key_index) # Remove the key
+        return True
 
     def keys(self):
         """Return a list of all keys in this hash table"""
         # TODO: Collect all keys in each of the buckets
-        pass
+        all_keys = [] # Will store all the key
+
+        for key in self.buckets:
+            for key_value in key:
+                key_index = self.buckets.index(key)
+                if len(key) != 0:
+                    all_keys.append(self.buckets[key_index])
+        return all_keys
 
     def values(self):
         """Return a list of all values in this hash table"""
@@ -94,6 +98,8 @@ def test_hashtable():
     print(ht)
     ht.get("Hello")
     print(ht)
+    print("KEYS: ", ht.keys())
+    print("LENGTH: ", ht.length())
     ht.delete("Hello")
     print(ht)
 
