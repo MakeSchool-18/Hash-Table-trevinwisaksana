@@ -26,14 +26,16 @@ class HashTable(object):
         """Return the length of this hash table by traversing its buckets"""
         # TODO: Count number of key-value entries in each of the buckets
         return self.size
+        # for bucket in self.buckets():
 
     def contains(self, key):
         """Return True if this hash table contains the given key, or False"""
         # TODO: Check if the given key exists in a bucket
         hash_key = self._bucket_index(key) # Gets the index of the key
-
-        if self.buckets[hash_key] is not None: # If the hask_key exists
-            return True
+        if self.buckets[hash_key].is_empty() is False: # If the hask_key exists
+            for key_value_pair in self.buckets[hash_key]: # Iteratre through the value pair
+                if key_value_pair[0] is key: # If the key matches
+                    return True
         return False
 
     def get(self, key):
@@ -41,21 +43,21 @@ class HashTable(object):
         # TODO: Check if the given key exists and return its associated value
         hash_key = self._bucket_index(key) # Gets the index of the key
 
-        if self.buckets[hash_key] is not None: # If the hask_key exists
+        if self.buckets[hash_key].is_empty() is False: # If the hask_key exists
             for key_value_pair in self.buckets[hash_key]: # Iteratre through the value pair
                 if key_value_pair[0] is key: # If the key matches
                     return key_value_pair[1] # Return the value
-        return None # If key doesn't exist, return None
+        raise KeyError("Key doesn't exist") # If key doesn't exist, return None
 
     def set(self, key, value):
         """Insert or update the given key with its associated value"""
         # TODO: Insert or update the given key-value entry into a bucket
         hash_key = self._bucket_index(key) # Gets the key in the array
-        key_value = (key, value) # Store tuple containing key and value in key_value
-        self.size += 1 # Increments the size everytime set() is called
+        key_value = [key, value] # Store tuple containing key and value in key_value
 
         if self.buckets[hash_key] is None: # Bucket returns None, the result of the hask_key, if empty
-            self.buckets[hash_key] = list([key_value]) # Creates a new list based on the hash_key
+            self.size += 1 # Increments the size everytime set() is called
+            self.buckets[hash_key] = LinkedList([key_value]) # Creates a new list based on the hash_key
             return True
         else: # If it's not empty
             for key_value_pair in self.buckets[hash_key]: # Goes through the key_value_pair
@@ -63,45 +65,58 @@ class HashTable(object):
                     key_value_pair[1] = value # Updates just the value
                     return True
             self.buckets[hash_key].append(key_value) # If the key doesn't exist, add the tuple
+            self.size += 1 # Increments the size everytime set() is called
             return True
 
     def delete(self, key):
         """Delete the given key from this hash table, or raise KeyError"""
         # TODO: Find the given key and delete its entry if found
-        if self.contains(key) is False: # If key is not found
-            return "Key not found"
-        key_index = self._bucket_index(key) # Getting index of key
-        self.buckets.pop(key_index) # Remove the key
-        return True
+        self.size -= 1
+        hash_key = self._bucket_index(key) # Gets the index of the key
+        if self.contains(key) is True:
+            for key_value_pair in self.buckets[hash_key]: # Iteratre through the value pair
+                if key_value_pair[0] is key: # If the key matches
+                    self.buckets[hash_key].delete(key_value_pair)
+                    # self.buckets[hash_key] = None
+                    return True
+        else:
+            raise KeyError("Key no longer exists") # If key doesn't exist, return None
 
     def keys(self):
         """Return a list of all keys in this hash table"""
         # TODO: Collect all keys in each of the buckets
         all_keys = [] # Will store all the key
-
-        for key in self.buckets:
-            for key_value in key:
-                key_index = self.buckets.index(key)
-                if len(key) != 0:
-                    all_keys.append(self.buckets[key_index])
+        for bucket in self.buckets:
+            for key in bucket:
+                if key is not None:
+                    all_keys.append(key[0])
         return all_keys
 
     def values(self):
         """Return a list of all values in this hash table"""
         # TODO: Collect all values in each of the buckets
-        pass
+        all_values = [] # Will store all the key
+
+        for bucket in self.buckets:
+            for value in bucket:
+                if value is not None:
+                    all_values.append(value[1])
+        return all_values
+
 
 def test_hashtable():
     ht = HashTable()
-    print(ht)
-    ht.set("Hello", 1)
-    print(ht)
-    ht.get("Hello")
-    print(ht)
-    print("KEYS: ", ht.keys())
-    print("LENGTH: ", ht.length())
-    ht.delete("Hello")
-    print(ht)
+    ht.set('I', 1)
+    ht.set('V', 4)
+    ht.set('X', 9)
+    print ht.length()
+    ht.set('V', 5)  # Update value
+    ht.set('X', 10)  # Update value
+    print ht
+    ht.get('I')
+    ht.get('V')
+    ht.get('X')
+    print ht.length()  # Check length is not overcounting
 
 if __name__ == "__main__":
     test_hashtable()
