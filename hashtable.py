@@ -53,20 +53,34 @@ class HashTable(object):
         """Insert or update the given key with its associated value"""
         # TODO: Insert or update the given key-value entry into a bucket
         hash_key = self._bucket_index(key) # Gets the key in the array
-        key_value = [key, value] # Store tuple containing key and value in key_value
+        key_value = (key, value) # Store tuple containing key and value in key_value
+        bucket = self.buckets[hash_key]
 
-        if self.buckets[hash_key] is None: # Bucket returns None, the result of the hask_key, if empty
-            self.size += 1 # Increments the size everytime set() is called
-            self.buckets[hash_key] = LinkedList([key_value]) # Creates a new list based on the hash_key
+        if bucket.find(lambda (tuple_key, _): tuple_key == key):
+            self.delete(key) # Removing the key from the list
             return True
-        else: # If it's not empty
-            for key_value_pair in self.buckets[hash_key]: # Goes through the key_value_pair
-                if key_value_pair[0] is key: # If the key already exists, just update the value
-                    key_value_pair[1] = value # Updates just the value
-                    return True
-            self.buckets[hash_key].append(key_value) # If the key doesn't exist, add the tuple
+
+        bucket.append(key_value) # Append the new tuple
+        self.size += 1 # Change the size because the delete reduces it by 2
+        return True
+
+        # Important example of repetition
+        ''' if bucket.is_empty() is True: # Bucket returns None, the result of the hash_key, if empty
             self.size += 1 # Increments the size everytime set() is called
+            bucket.append(key_value) # Creates a new list based on the hash_key
             return True
+        # If bucket contains key
+        elif bucket.find(lambda (tuple_key, _): tuple_key == key):
+        # elif bucket.find(lambda (k, v): k == key):
+        # elif bucket.find(lambda data: data[0] == key):
+            self.delete(key) # Removing the key from the list
+            bucket.append(key_value) # Append the new tuple
+            self.size += 1 # Change the size because the delete reduces it by 2
+            return True
+        else: # Bucket contains key-value entry
+            bucket.append(key_value) # If the key doesn't exist, add the tuple
+            self.size += 1 # Increments the size everytime set() is called
+            return True '''
 
     def delete(self, key):
         """Delete the given key from this hash table, or raise KeyError"""
