@@ -80,7 +80,8 @@ class HashTable(object):
         else: # Bucket contains key-value entry
             bucket.append(key_value) # If the key doesn't exist, add the tuple
             self.size += 1 # Increments the size everytime set() is called
-            return True '''
+            return True
+        '''
 
     def delete(self, key):
         """Delete the given key from this hash table, or raise KeyError"""
