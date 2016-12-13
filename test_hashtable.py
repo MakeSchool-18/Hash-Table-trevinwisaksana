@@ -3,7 +3,6 @@
 from hashtable import HashTable
 import unittest
 
-
 class HashTableTest(unittest.TestCase):
 
     def test_init(self):
