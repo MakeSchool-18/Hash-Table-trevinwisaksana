@@ -1,5 +1,5 @@
 # Importing the dict_histogram function
-from word_frequency import dict_histogram
+from word_frequency import dict_histogram, tuple_histogram
 # Importing random
 import random
 
@@ -20,6 +20,7 @@ SUDO CODE:
     # Append that to a list
     # Return that list
 '''
+
 
 # Probability based shuffler chooses words based on probability.
 def probability_using_word_repositioning(number_of_words_in_sentence, source_of_text):

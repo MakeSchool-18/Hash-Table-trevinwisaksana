@@ -11,7 +11,7 @@ class Node(object):
         self.next = None # Constant running time to set to None
 
     def __repr__(self):
-        """Return a string representation of this node"""
+        """Returtvn a string representation of this node"""
         return 'Node({})'.format(repr(self.data))
 
 
@@ -171,13 +171,13 @@ def test_linked_list():
 
     print("-------------------")
     print(ll)
-    ll.delete('A')
+    ll.delete('C')
     print('tail: ' + str(ll.tail))
     print(ll)
-    ll.delete('C')
+    ll.delete('B')
     print("What's left: ", ll)
     print('tail: ' + str(ll.tail))
-    ll.delete('B')
+    ll.delete('A')
     print(ll)
     print('head: ' + str(ll.head))
     print('tail: ' + str(ll.tail))

@@ -6,6 +6,8 @@ from flask import request
 import json
 # Importing sentence creator
 from word_probability import sentence_creator, distribution_creator
+# Importing dict_histogram and tuple_histogram
+from word_frequency import dict_histogram, tuple_histogram
 
 
 ''' Creating an instance of Flask class.
@@ -50,28 +52,6 @@ def get_new_sentence():
         # Seperating each dictionary in array using ','
         return json.dumps(i)
 
-
-# A function that uses dictionaries as a word frequency counter.
-def dict_histogram(text):
-    # Entire text
-    entire_splitted_text = text.split()
-    # Dictionary that contains the new word
-    word_dict = {}
-    # Counter contains the int for the frequency
-    # word_frequency = 0
-    # Loops through each word in the entire text
-    for word in entire_splitted_text:
-        # Removing all the capital letters from words.
-        word = word.lower()
-        # Going to every word and makes the Value 1 because it's the first word
-        # there.
-        if word in word_dict.keys():
-            # If the word matches a dictionary key, then append the Value by 1
-            word_dict[word] += 1
-        else:
-            # If not, add a new key value pair to the dictionary
-            word_dict[word] = 1
-    return word_dict
 
 if __name__ == '__main__':
     app.run(debug=True)
